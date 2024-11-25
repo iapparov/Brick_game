@@ -1,8 +1,9 @@
 #ifndef FRONT_H
 #define FRONT_H
 
-#include "../../brick_game/defines.h"
+#include "../../../brick_game/defines.h"
 
+void print_start(void);
 void print_overlay(void);
 void print_rectangle(int top_y, int bottom_y, int left_x, int right_x);
 void draw_block(int y, int x, int color_pair);

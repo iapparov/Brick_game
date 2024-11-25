@@ -1,14 +1,5 @@
 #include "tetris.h"
 
-int main(void) {
-  WIN_INIT(50);
-  setlocale(LC_ALL, "");
-  print_overlay();
-  game_loop();
-  endwin();
-  return SUCCESS;
-}
-
 void game_loop(void) {
   UserAction_t sig = 0;
   srand(time(NULL));

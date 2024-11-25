@@ -1,6 +1,8 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
+
+
 #include <locale.h>
 #include <ncurses.h>
 
@@ -28,8 +30,16 @@
 #define BOARD_Y 20
 #define HUD_WIDTH 12  // ширина окошка информации
 
+#define CHOOSE_MESSAGE "Choose game:"
+#define CHOOSE_MESSAGE_LEN 12
+#define CHOOSE_TETRIS "Tetris (Press 1)"
+#define CHOOSE_TETRIS_LEN 17
+#define CHOOSE_SNAKE "Snake (Press 2)"
+#define CHOOSE_SNAKE_LEN 15
 #define INTRO_MESSAGE "Press ENTER to start"
 #define INTRO_MESSAGE_LEN 20
+#define BACK_MENU_MESSAGE "Press ESC to menu"
+#define BACK_MENU_MESSAGE_LEN 23
 #define GM_MESSAGE "GAME OVER!"
 #define GM_MESSAGE_LEN 10
 #define BOARDS_BEGIN 2
@@ -43,5 +53,9 @@
 #define ESCAPE 27
 #define ENTER_KEY 10
 #define SPACE_KEY 32
+#define KEY_DOWN_CPP 258
+#define KEY_LEFT_CPP 260
+#define KEY_RIGHT_CPP 261
+#define KEY_UP_CPP 259
 
 #endif

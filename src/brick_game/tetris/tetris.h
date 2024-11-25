@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#include "../../gui/cli/front.h"
+#include "../../gui/cli/tetris/front.h"
 #include "../defines.h"
 #include "backend.h"
 #include "fsm.h"
