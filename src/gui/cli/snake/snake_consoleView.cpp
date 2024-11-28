@@ -5,7 +5,8 @@ namespace s21{
 
     void snakeConsoleView::startEventLoop() {
         
-        while (true){
+        bool flag = true;
+        while (flag){
 
             switch (performChoice())
             {
@@ -19,6 +20,9 @@ namespace s21{
                 while (controller->update()) {
                     render(controller->getModel());  // Рисуем текущую модель
                 }
+                break;
+            case TERMINATE:
+                flag = false;
                 break;
             default:
                 clear();
@@ -39,11 +43,13 @@ namespace s21{
         print_overlay_snake();
         for (size_t i=0; i<stats.getBody().size(); i++){
             draw_block(stats.getBody().at(i).second, stats.getBody().at(i).first, 1);
+            draw_block(stats.getBody().at(i).second, stats.getBody().at(i).first+1, 1);
         }
         for (size_t i=0; i<stats.getApple().size(); i++){
             draw_block(stats.getApple().at(i).second, stats.getApple().at(i).first, 2);
+            draw_block(stats.getApple().at(i).second, stats.getApple().at(i).first+1, 2);
         }
-        print_stats(stats.getLevel(), stats.getScore(), stats.getSpeed());
+        print_stats(stats.getLevel(), stats.getScore(), stats.getHighscore());
     }
 
     void snakeConsoleView::print_rectangle(int top_y, int bottom_y, int left_x, int right_x) {
@@ -84,6 +90,8 @@ namespace s21{
             Choice = TETRIS;
         if (char_Choice == '2')
             Choice = SNAKE;
+        if (char_Choice == ESCAPE)
+            Choice = TERMINATE;
         return Choice;
     }
 

@@ -1,5 +1,5 @@
-#ifndef EXAMPLEMODEL_H
-#define EXAMPLEMODEL_H
+#ifndef SNAKEMODEL_H
+#define SNAKEMODEL_H
 
 #include <vector>
 #include <random>
@@ -21,19 +21,19 @@ public:
         dir direction_;
         int level_;
         int score_;
-        int speed_;
+        int highscore_;
         std::vector<std::pair<int, int>> apple_;
     public:
-        Game_Stats() : direction_(UP), level_(1), score_(0), speed_(1) {};
+        Game_Stats() : direction_(UP), level_(1), score_(0), highscore_(0) {};
         std::vector<std::pair<int, int>>& getBody();
         std::vector<std::pair<int, int>>& getApple();
         int getLevel() const;
         int getScore() const;
-        int getSpeed() const;
+        int getHighscore() const;
         dir& getDir();
         void setLevel(int level);
         void setScore(int score);
-        void setSpeed(int speed);
+        void setHighscore(int highscore);
         void addBodySegment(int x, int y);
         void addAppleSegment(int x, int y);
         void AppleClear();
@@ -46,6 +46,7 @@ public:
     snakeModel() : game_stats_() {}
     void spawn();
     void apple_spawn();
+    void update_highscore();
     bool isPositionFree(int x, int y);
     bool snake_collide();
     void snake_plus();

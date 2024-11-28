@@ -1,5 +1,5 @@
-#ifndef EXAMPLECONTROLLER_H
-#define EXAMPLECONTROLLER_H
+#ifndef SNAKECONTROLLER_H
+#define SNAKECONTROLLER_H
 
 #include "snake_Model.h"
 
@@ -7,7 +7,7 @@ namespace s21{
 
     class snakeController 
     {
-        private:
+        public:
             snakeModel *model;
             typedef enum {
                 START = 0,
@@ -30,14 +30,15 @@ namespace s21{
                 Start, 
                 Move
             } UserAction;
+        private:
             snake_state state_;
             int sig_;
             clock_t start_time_;
             double elapsed_time_;
         public:
-            snakeController(snakeModel *m):model(m), sig_(0), start_time_(clock()), elapsed_time_(0.0) {
-                srand(time(NULL));
-            };
+            snakeController(snakeModel *m);
+            void QTsig(int sig);
+            snake_state getState();
             bool start_state() const;
             bool update();
             int timer();

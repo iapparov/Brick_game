@@ -1,0 +1,361 @@
+#include "brick_game/tetris/fsm.h"
+#include "brick_game/tetris/backend.h"
+#include "brick_game/tetris/tetris.h"
+#include <check.h>
+
+
+#suite backendtests
+
+#test GameInfo_t_1
+  GameInfo_t* GameObj_init = updateCurrentState();
+  GameObj_init->level = 3;
+
+  GameInfo_t* GameObj_test = updateCurrentState();
+
+  ck_assert_int_eq(GameObj_test->level, 3);
+  ck_assert_int_eq(GameObj_test->high_score, 0);
+  ck_assert_int_eq(GameObj_test->score, 0);
+
+#test GameInfo_t_2
+  GameInfo_t* GameObj_init = updateCurrentState();
+  stats_init();
+  ck_assert_int_eq(GameObj_init->level, 1);
+  ck_assert_int_eq(GameObj_init->high_score, 0);
+  ck_assert_int_eq(GameObj_init->score, 0);
+
+#test block_init_1
+int exp_block[8][2]={{8,0},{8,1},{8,2},{8,3},{9,0},{9,1},{9,2},{9,3}};
+int block[8][2]={0};
+block_init(1,block);
+
+for (int i=0;i<8;i++){
+  ck_assert_int_eq(block[i][0], exp_block[i][0]);
+  ck_assert_int_eq(block[i][1], exp_block[i][1]);
+}
+
+#test block_init_2
+int exp_block[8][2]={{8,0},{9,0},{10,0},{11,0},{8,1},{9,1},{8,2},{9,2}};
+int block[8][2]={0};
+block_init(2,block);
+
+for (int i=0;i<8;i++){
+  ck_assert_int_eq(block[i][0], exp_block[i][0]);
+  ck_assert_int_eq(block[i][1], exp_block[i][1]);
+}
+
+#test block_init_3
+int exp_block[8][2]={{8,0},{9,0},{10,0},{11,0},{10,1},{11,1},{10,2},{11,2}};
+int block[8][2]={0};
+block_init(3,block);
+
+for (int i=0;i<8;i++){
+  ck_assert_int_eq(block[i][0], exp_block[i][0]);
+  ck_assert_int_eq(block[i][1], exp_block[i][1]);
+}
+
+#test block_init_4
+int exp_block[8][2]={{8,0},{9,0},{10,0},{11,0},{8,1},{9,1},{10,1},{11,1}};
+int block[8][2]={0};
+block_init(4,block);
+
+for (int i=0;i<8;i++){
+  ck_assert_int_eq(block[i][0], exp_block[i][0]);
+  ck_assert_int_eq(block[i][1], exp_block[i][1]);
+}
+
+#test block_init_5
+int exp_block[8][2]={{8,1},{9,1},{10,1},{11,1},{10,0},{11,0},{12,0},{13,0}};
+int block[8][2]={0};
+block_init(5,block);
+
+for (int i=0;i<8;i++){
+  ck_assert_int_eq(block[i][0], exp_block[i][0]);
+  ck_assert_int_eq(block[i][1], exp_block[i][1]);
+}
+
+#test block_init_6
+int exp_block[8][2]={{8,0},{9,0},{10,0},{11,0},{12,0},{13,0},{10,1},{11,1}};
+int block[8][2]={0};
+block_init(6,block);
+
+for (int i=0;i<8;i++){
+  ck_assert_int_eq(block[i][0], exp_block[i][0]);
+  ck_assert_int_eq(block[i][1], exp_block[i][1]);
+}
+
+#test block_init_7
+int exp_block[8][2]={{8,0},{9,0},{10,0},{11,0},{10,1},{11,1},{12,1},{13,1}};
+int block[8][2]={0};
+block_init(7,block);
+
+for (int i=0;i<8;i++){
+  ck_assert_int_eq(block[i][0], exp_block[i][0]);
+  ck_assert_int_eq(block[i][1], exp_block[i][1]);
+}
+
+#test block_rotate_1
+int exp_block[8][2]={{6,2},{7,2},{8,2},{9,2},{10,2},{11,2},{12,2},{13,2}};
+int block[8][2]={0};
+int field[20][20]={0};
+int rotate = 0;
+block_init(1,block);
+i_block_rotate(block, &rotate, field);
+
+
+for (int i=0;i<8;i++){
+  ck_assert_int_eq(block[i][0], exp_block[i][0]);
+  ck_assert_int_eq(block[i][1], exp_block[i][1]);
+}
+
+#test block_rotate_2
+
+int exp_block[8][2]={{8,1},{9,1},{10,1},{11,1},{12,1},{13,1},{12,2},{13,2}};
+int block[8][2]={0};
+int field[20][20]={0};
+int rotate = 0;
+block_init(2,block);
+j_block_rotate(block, &rotate, field);
+
+
+for (int i=0;i<8;i++){
+  ck_assert_int_eq(block[i][0], exp_block[i][0]);
+  ck_assert_int_eq(block[i][1], exp_block[i][1]);
+}
+
+#test block_rotate_3
+int exp_block[8][2]={{8,2},{9,2},{10,2},{11,2},{12,2},{13,2},{12,1},{13,1}};
+int block[8][2]={0};
+int field[20][20]={0};
+int rotate = 0;
+block_init(3,block);
+l_block_rotate(block, &rotate, field);
+
+
+for (int i=0;i<8;i++){
+  ck_assert_int_eq(block[i][0], exp_block[i][0]);
+  ck_assert_int_eq(block[i][1], exp_block[i][1]);
+}
+
+#test block_rotate_4
+int exp_block[8][2]={{8,0},{9,0},{8,1},{9,1},{10,1},{11,1},{10,2},{11,2}};
+int block[8][2]={0};
+int field[20][20]={0};
+int rotate = 0;
+block_init(5,block);
+s_block_rotate(block, &rotate, field);
+
+
+for (int i=0;i<8;i++){
+  ck_assert_int_eq(block[i][0], exp_block[i][0]);
+  ck_assert_int_eq(block[i][1], exp_block[i][1]);
+}
+
+#test block_rotate_5
+int exp_block[8][2]={{10,0},{11,0},{10,1},{11,1},{10,2},{11,2},{8,1},{9,1}};
+int block[8][2]={0};
+int field[20][20]={0};
+int rotate = 0;
+block_init(6,block);
+t_block_rotate(block, &rotate, field);
+
+
+for (int i=0;i<8;i++){
+  ck_assert_int_eq(block[i][0], exp_block[i][0]);
+  ck_assert_int_eq(block[i][1], exp_block[i][1]);
+}
+
+#test block_rotate_6
+int exp_block[8][2]={{8,1},{9,1},{10,1},{11,1},{10,0},{11,0},{8,2},{9,2}};
+int block[8][2]={0};
+int field[20][20]={0};
+int rotate = 0;
+block_init(7,block);
+z_block_rotate(block, &rotate, field);
+
+
+for (int i=0;i<8;i++){
+  ck_assert_int_eq(block[i][0], exp_block[i][0]);
+  ck_assert_int_eq(block[i][1], exp_block[i][1]);
+}
+
+#test block_rotate_checker_1
+int exp_block[8][2]={0};
+int block[8][2]={0};
+int field[20][20];
+for (int i = 0; i<20; i++){
+  for (int j = 0; j<20; j++){
+    field[i][j]=1;
+  }
+}
+int rotate = 0;
+
+block_init(1,block);
+block_init(1,exp_block);
+i_block_rotate(block, &rotate, field);
+
+for (int i=0;i<8;i++){
+  ck_assert_int_eq(block[i][0], exp_block[i][0]);
+  ck_assert_int_eq(block[i][1], exp_block[i][1]);
+}
+
+#test block_rotate_checker_2
+int exp_block[8][2]={0};
+int block[8][2]={0};
+int field[20][20];
+for (int i = 0; i<20; i++){
+  for (int j = 0; j<20; j++){
+    field[i][j]=1;
+  }
+}
+int rotate = 0;
+block_init(2,block);
+block_init(2,exp_block);
+j_block_rotate(block, &rotate, field);
+
+for (int i=0;i<8;i++){
+  ck_assert_int_eq(block[i][0], exp_block[i][0]);
+  ck_assert_int_eq(block[i][1], exp_block[i][1]);
+}
+
+#test block_rotate_checker_3
+int exp_block[8][2]={0};
+int block[8][2]={0};
+int field[20][20];
+for (int i = 0; i<20; i++){
+  for (int j = 0; j<20; j++){
+    field[i][j]=1;
+  }
+}
+int rotate = 0;
+block_init(3,block);
+block_init(3,exp_block);
+l_block_rotate(block, &rotate, field);
+
+for (int i=0;i<8;i++){
+  ck_assert_int_eq(block[i][0], exp_block[i][0]);
+  ck_assert_int_eq(block[i][1], exp_block[i][1]);
+}
+
+#test block_rotate_checker_4
+int exp_block[8][2]={0};
+int block[8][2]={0};
+int field[20][20];
+for (int i = 0; i<20; i++){
+  for (int j = 0; j<20; j++){
+    field[i][j]=1;
+  }
+}
+int rotate = 0;
+block_init(5,block);
+block_init(5,exp_block);
+s_block_rotate(block, &rotate, field);
+
+for (int i=0;i<8;i++){
+  ck_assert_int_eq(block[i][0], exp_block[i][0]);
+  ck_assert_int_eq(block[i][1], exp_block[i][1]);
+}
+
+#test block_rotate_checker_5
+int exp_block[8][2]={0};
+int block[8][2]={0};
+int field[20][20];
+for (int i = 0; i<20; i++){
+  for (int j = 0; j<20; j++){
+    field[i][j]=1;
+  }
+}
+int rotate = 0;
+block_init(6,block);
+block_init(6,exp_block);
+t_block_rotate(block, &rotate, field);
+
+for (int i=0;i<8;i++){
+  ck_assert_int_eq(block[i][0], exp_block[i][0]);
+  ck_assert_int_eq(block[i][1], exp_block[i][1]);
+}
+
+#test block_rotate_checker_6
+int exp_block[8][2]={0};
+int block[8][2]={0};
+int field[20][20];
+for (int i = 0; i<20; i++){
+  for (int j = 0; j<20; j++){
+    field[i][j]=1;
+  }
+}
+int rotate = 0;
+block_init(7,block);
+block_init(7,exp_block);
+z_block_rotate(block, &rotate, field);
+
+for (int i=0;i<8;i++){
+  ck_assert_int_eq(block[i][0], exp_block[i][0]);
+  ck_assert_int_eq(block[i][1], exp_block[i][1]);
+}
+
+#test high_score_1
+
+GameInfo_t* GameObj = updateCurrentState();
+stats_init();
+game_stats(1, &GameObj->score, &GameObj->level, &GameObj->high_score);
+game_stats(2, &GameObj->score, &GameObj->level, &GameObj->high_score);
+game_stats(3, &GameObj->score, &GameObj->level, &GameObj->high_score);
+game_stats(4, &GameObj->score, &GameObj->level, &GameObj->high_score);
+game_stats(0, &GameObj->score, &GameObj->level, &GameObj->high_score);
+ck_assert_int_eq(GameObj->score, GameObj->high_score);
+ck_assert_int_eq(GameObj->score, 2600);
+ck_assert_int_eq(GameObj->level, 5);
+
+char filename[] = "highscore.md";
+remove(filename);
+
+# test timer_1
+
+clock_t start_time;
+double elapsed_time = 0.0;
+start_time = clock();
+start_time*=100000;
+ck_assert_int_eq(timer(&start_time, elapsed_time), 1);
+
+#test attaching_1
+
+int field[20][20];
+for (int i = 0; i<20; i++){
+  for (int j = 0; j<20; j++){
+    field[i][j]=0;
+  }
+}
+
+for (int j = 0; j<20; j++){
+  field[j][19]=1;
+}
+
+ck_assert_int_eq(attaching(field), 1);
+
+#test attaching_2
+
+int field[20][20];
+for (int i = 0; i<20; i++){
+  for (int j = 0; j<20; j++){
+    field[i][j]=0;
+  }
+}
+
+for (int j = 0; j<20; j++){
+  field[j][19]=1;
+}
+
+ck_assert_int_eq(attaching(field), 1);
+
+#test check_spawn_1
+
+int field[20][20];
+int block[8][2];
+block_init(1, block);
+for (int i = 0; i<20; i++){
+  for (int j = 0; j<20; j++){
+    field[i][j]=1;
+  }
+}
+
+ck_assert_int_eq(check_spawn(field, block), 0);

@@ -14,6 +14,7 @@ namespace s21{
     {
         TETRIS = 1,
         SNAKE = 2,
+        TERMINATE
     };
 
     class snakeConsoleView

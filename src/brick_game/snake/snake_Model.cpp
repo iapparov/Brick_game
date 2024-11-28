@@ -5,18 +5,50 @@ namespace s21{
     void snakeModel::stats() 
     {
         game_stats_.setScore(game_stats_.getScore()+1);
-        if (game_stats_.getScore()/5>1){
+        update_highscore();
+        if (game_stats_.getScore()%5==0){
             game_stats_.setLevel(game_stats_.getLevel()+1);
-            game_stats_.setSpeed(game_stats_.getSpeed()+1);
         }
     }
 
     void snakeModel::spawn(){
+        // game_stats_.addBodySegment(11,10);
         game_stats_.addBodySegment(11,10);
-        game_stats_.addBodySegment(12,10);
+        // game_stats_.addBodySegment(11,11);
         game_stats_.addBodySegment(11,11);
-        game_stats_.addBodySegment(12,11);
+        game_stats_.addBodySegment(11,12);
+        game_stats_.addBodySegment(11,13);
         apple_spawn();
+    }
+
+    void snakeModel::update_highscore() {
+        FILE *file;
+        int highscore = game_stats_.getScore();
+
+        file = fopen("Snakehighscore.md", "r");
+        if (file == NULL) {
+            file = fopen("Snakehighscore.md", "w");
+            if (file == NULL) {
+            perror("Ошибка при создании файла");
+            exit(EXIT_FAILURE);
+            }
+            fprintf(file, "%d\n", game_stats_.getScore());
+            fclose(file);
+        } else {
+            fscanf(file, "%d", &highscore);
+            fclose(file);
+            if (game_stats_.getScore() > highscore) {
+            file = fopen("Snakehighscore.md", "w");
+            if (file == NULL) {
+                perror("Ошибка при открытии файла для записи");
+                exit(EXIT_FAILURE);
+            }
+            fprintf(file, "%d\n", game_stats_.getScore());
+            highscore = game_stats_.getScore();
+            }
+            fclose(file);
+        }
+        game_stats_.setHighscore(highscore);
     }
 
     void snakeModel::apple_spawn(){
@@ -25,7 +57,7 @@ namespace s21{
         std::mt19937 gen(rd()); // Генератор на основе Mersenne Twister
 
         // Определяем диапазон случайных чисел
-        std::uniform_int_distribution<> dist(1, 10); // Диапазон от 1 до 100
+        std::uniform_int_distribution<> dist(3, 10); // Диапазон от 1 до 100
         std::uniform_int_distribution<> dist_y(3, 21); // Диапазон от 1 до 100
 
         // Генерируем случайное число
@@ -37,14 +69,14 @@ namespace s21{
         } while (!isPositionFree(random_x, random_y)); // Проверяем, свободна ли позиция
 
 
+        // game_stats_.addAppleSegment(random_x, random_y);
         game_stats_.addAppleSegment(random_x, random_y);
-        game_stats_.addAppleSegment(random_x+1, random_y);
     }
 
     bool snakeModel::isPositionFree(int x, int y) {
     // Проверяем, находится ли позиция (x, y) в теле змейки
-        for (auto segment : game_stats_.getBody()) {
-            if (segment.first == x && segment.second == y) {
+        for (size_t i =0; i< game_stats_.getBody().size(); i++) {
+            if (game_stats_.getBody().at(i).first == x && game_stats_.getBody().at(i).second == y) {
                 return false; // Позиция занята
             }
         }
@@ -56,7 +88,8 @@ namespace s21{
         game_stats_.getBody().clear();
         game_stats_.setLevel(1);
         game_stats_.setScore(0);
-        game_stats_.setSpeed(1);
+        game_stats_.setHighscore(0);
+        update_highscore();
         game_stats_.getDir() = UP;
     }
 
@@ -65,57 +98,44 @@ namespace s21{
         if (game_stats_.getBody().at(0).first == game_stats_.getApple().at(0).first && 
             game_stats_.getBody().at(0).second == game_stats_.getApple().at(0).second)
             flag = true;
-        if (game_stats_.getBody().at(1).first == game_stats_.getApple().at(0).first && 
-            game_stats_.getBody().at(1).second == game_stats_.getApple().at(0).second)
-            flag = true;
-        if (game_stats_.getBody().at(0).first == game_stats_.getApple().at(1).first && 
-            game_stats_.getBody().at(0).second == game_stats_.getApple().at(1).second)
-            flag = true;
-        if (game_stats_.getBody().at(1).first == game_stats_.getApple().at(1).first && 
-            game_stats_.getBody().at(1).second == game_stats_.getApple().at(1).second)
-            flag = true;
+        // if (game_stats_.getBody().at(1).first == game_stats_.getApple().at(0).first && 
+        //     game_stats_.getBody().at(1).second == game_stats_.getApple().at(0).second)
+        //     flag = true;
+        // if (game_stats_.getBody().at(0).first == game_stats_.getApple().at(1).first && 
+        //     game_stats_.getBody().at(0).second == game_stats_.getApple().at(1).second)
+        //     flag = true;
+        // if (game_stats_.getBody().at(1).first == game_stats_.getApple().at(1).first && 
+        //     game_stats_.getBody().at(1).second == game_stats_.getApple().at(1).second)
+        //     flag = true;
         
         return flag;
     }
 
     void snakeModel::snake_plus(){
-        int last_x = game_stats_.getBody().at(game_stats_.getBody().size()-1).first;
-        int last_y = game_stats_.getBody().at(game_stats_.getBody().size()-1).second;;
-
-        switch (game_stats_.getDir())
-        {
-        case UP:
-            game_stats_.addBodySegment(last_x-1, last_y+1);
+        int last_x = game_stats_.getBody().back().first;
+        int last_y = game_stats_.getBody().back().second;
+        int pre_last_x = game_stats_.getBody().at(game_stats_.getBody().size()-2).first;
+        int pre_last_y = game_stats_.getBody().at(game_stats_.getBody().size()-2).second;
+        if (last_x-pre_last_x == 0 && last_y-pre_last_y == -1)
+            game_stats_.addBodySegment(last_x, last_y-1);
+        else if(last_x-pre_last_x == 0 && last_y-pre_last_y == 1)
             game_stats_.addBodySegment(last_x, last_y+1);
-            break;
-        case DOWN:
-            game_stats_.addBodySegment(last_x, last_y);
-            game_stats_.addBodySegment(last_x, last_y);
-            break;
-        case RIGHT:
-            game_stats_.addBodySegment(last_x, last_y);
-            game_stats_.addBodySegment(last_x, last_y);
-            break;
-        case LEFT:
-            game_stats_.addBodySegment(last_x, last_y);
-            game_stats_.addBodySegment(last_x, last_y);
-            break;
-        }
+        else if(last_x-pre_last_x == -1 && last_y-pre_last_y == 0)
+            game_stats_.addBodySegment(last_x-1, last_y);
+        else 
+            game_stats_.addBodySegment(last_x+1, last_y);
     }
 
     bool snakeModel::check_borders(){
         bool border_flag = false;
-        if (game_stats_.getBody().at(0).first <= 2 || game_stats_.getBody().at(1).first >= 23)
+        if (game_stats_.getBody().at(0).first < 3 || game_stats_.getBody().at(0).first > 22)
             border_flag = true;
-        if (game_stats_.getBody().at(0).second <= 2 || game_stats_.getBody().at(1).second >= 23)
+        if (game_stats_.getBody().at(0).second < 3 || game_stats_.getBody().at(0).second > 22)
             border_flag = true;
 
-        for (size_t i = 2; i<game_stats_.getBody().size(); ++i){
+        for (size_t i = 1; i<game_stats_.getBody().size(); ++i){
             if (game_stats_.getBody().at(0).first == game_stats_.getBody().at(i).first &&
                 game_stats_.getBody().at(0).second == game_stats_.getBody().at(i).second)
-                border_flag = true;
-            if (game_stats_.getBody().at(1).first == game_stats_.getBody().at(i).first &&
-                game_stats_.getBody().at(1).second == game_stats_.getBody().at(i).second)
                 border_flag = true;
         }
 
@@ -129,38 +149,38 @@ namespace s21{
         // Новая позиция головы
         int new_x = body[0].first;
         int new_y = body[0].second;
-        int new_x2 = body[1].first;
-        int new_y2 = body[1].second;
+        // int new_x2 = body[1].first;
+        // int new_y2 = body[1].second;
 
         // Обновляем координаты головы в зависимости от направления
         switch (game_stats_.getDir()) {
             case UP:
                 new_y -= 1;
-                new_y2 -= 1;
+                // new_y2 -= 1;
                 break;
             case DOWN:
                 new_y += 1;
-                new_y2 += 1;
+                // new_y2 += 1;
                 break;
             case RIGHT:
-                new_x += 2;
-                new_x2 += 2;
+                new_x += 1;
+                // new_x2 += 2;
                 break;
             case LEFT:
-                new_x -= 2;
-                new_x2 -= 2;
+                new_x -= 1;
+                // new_x2 -= 2;
                 break;
         }
 
         // Двигаем тело змейки
-        for (size_t i = body.size() - 1; i > 0; --i) {
-            body[i] = body[i - 2]; // Каждый сегмент тела берет координаты предыдущего
+        for (size_t i = body.size()-1; i > 0; --i) {
+            body[i] = body[i - 1]; // Каждый сегмент тела берет координаты предыдущего
         }
         
 
         // Обновляем координаты головы
         body[0] = {new_x, new_y};
-        body[1] = {new_x2, new_y2};
+        // body[1] = {new_x2, new_y2};
     }
 
     void snakeModel::snake_move_up() {
@@ -173,17 +193,17 @@ namespace s21{
             // Новая позиция головы
             int new_x = body[0].first; // Текущая X-координата головы
             int new_y = body[0].second-1; // Сдвиг вверх (уменьшение Y-координаты)
-            int new_x2 = body[1].first; // Текущая X-координата головы
-            int new_y2 = body[1].second-1; // Сдвиг вверх (уменьшение Y-координаты)
+            // int new_x2 = body[1].first; // Текущая X-координата головы
+            // int new_y2 = body[1].second-1; // Сдвиг вверх (уменьшение Y-координаты)
 
             // Двигаем тело змейки (с конца в начало)
-            for (size_t i = body.size() - 1; i > 0; --i) {
-                body[i] = body[i - 2]; // Каждый сегмент занимает место предыдущего
+            for (size_t i = body.size()-1; i > 0; --i) {
+                body[i] = body[i - 1]; // Каждый сегмент занимает место предыдущего
             }
 
             // Обновляем координаты головы
             body[0] = {new_x, new_y};
-            body[1] = {new_x2, new_y2};
+            // body[1] = {new_x2, new_y2};
         }
     }
 
@@ -196,17 +216,17 @@ namespace s21{
             // Новая позиция головы
             int new_x = body[0].first; // Текущая X-координата головы
             int new_y = body[0].second+1; // Сдвиг вверх (уменьшение Y-координаты)
-            int new_x2 = body[1].first; // Текущая X-координата головы
-            int new_y2 = body[1].second+1; // Сдвиг вверх (уменьшение Y-координаты)
+            // int new_x2 = body[1].first; // Текущая X-координата головы
+            // int new_y2 = body[1].second+1; // Сдвиг вверх (уменьшение Y-координаты)
 
             // Двигаем тело змейки (с конца в начало)
-            for (size_t i = body.size() - 1; i > 0; --i) {
-                body[i] = body[i - 2]; // Каждый сегмент занимает место предыдущего
+            for (size_t i = body.size()-1; i > 0; --i) {
+                body[i] = body[i - 1]; // Каждый сегмент занимает место предыдущего
             }
 
             // Обновляем координаты головы
             body[0] = {new_x, new_y};
-            body[1] = {new_x2, new_y2};
+            // body[1] = {new_x2, new_y2};
         }
 
     }
@@ -216,19 +236,19 @@ namespace s21{
             auto& dir = game_stats_.getDir();
             dir = LEFT;
                     // Новая позиция головы
-            int new_x = body[0].first-2; // Текущая X-координата головы
+            int new_x = body[0].first-1; // Текущая X-координата головы
             int new_y = body[0].second; // Сдвиг вверх (уменьшение Y-координаты)
-            int new_x2 = body[1].first-2; // Текущая X-координата головы
-            int new_y2 = body[1].second; // Сдвиг вверх (уменьшение Y-координаты)
+            // int new_x2 = body[1].first-2; // Текущая X-координата головы
+            // int new_y2 = body[1].second; // Сдвиг вверх (уменьшение Y-координаты)
 
             // Двигаем тело змейки (с конца в начало)
-            for (size_t i = body.size() - 1; i > 0; --i) {
-                body[i] = body[i - 2]; // Каждый сегмент занимает место предыдущего
+            for (size_t i = body.size()-1; i > 0; --i) {
+                body[i] = body[i - 1]; // Каждый сегмент занимает место предыдущего
             }
 
             // Обновляем координаты головы
             body[0] = {new_x, new_y};
-            body[1] = {new_x2, new_y2};
+            // body[1] = {new_x2, new_y2};
         }
 
 
@@ -239,19 +259,19 @@ namespace s21{
             auto& dir = game_stats_.getDir();
             dir = RIGHT;
             // Новая позиция головы
-            int new_x = body[0].first+2; // Текущая X-координата головы
+            int new_x = body[0].first+1; // Текущая X-координата головы
             int new_y = body[0].second; // Сдвиг вверх (уменьшение Y-координаты)
-            int new_x2 = body[1].first+2; // Текущая X-координата головы
-            int new_y2 = body[1].second; // Сдвиг вверх (уменьшение Y-координаты)
+            // int new_x2 = body[1].first+2; // Текущая X-координата головы
+            // int new_y2 = body[1].second; // Сдвиг вверх (уменьшение Y-координаты)
 
             // Двигаем тело змейки (с конца в начало)
-            for (size_t i = body.size() - 1; i > 0; --i) {
-                body[i] = body[i - 2]; // Каждый сегмент занимает место предыдущего
+            for (size_t i = body.size()-1; i > 0; --i) {
+                body[i] = body[i - 1]; // Каждый сегмент занимает место предыдущего
             }
 
             // Обновляем координаты головы
             body[0] = {new_x, new_y};
-            body[1] = {new_x2, new_y2};
+            // body[1] = {new_x2, new_y2};
         }
 
     }
@@ -280,8 +300,8 @@ namespace s21{
         return score_;
     }
     
-    int snakeModel::Game_Stats::getSpeed() const {
-        return speed_;
+    int snakeModel::Game_Stats::getHighscore() const {
+        return highscore_;
     }
 
     void snakeModel::Game_Stats::setLevel(int level) {
@@ -292,8 +312,8 @@ namespace s21{
         score_ = score;
     }
 
-    void snakeModel::Game_Stats::setSpeed(int speed) {
-        speed_ = speed;
+    void snakeModel::Game_Stats::setHighscore(int highscore) {
+        highscore_ = highscore;
     }
     
     void snakeModel::Game_Stats::addBodySegment(int x, int y) {

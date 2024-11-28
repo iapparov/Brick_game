@@ -1,9 +1,12 @@
 #include "snake_Controller.h"
 #include "../defines.h"
+#include <iostream>
+
 
 namespace s21{
     bool snakeController::update()
     {
+       
         bool break_flag = TRUE;
             if (state_ == EXIT_STATE) break_flag = FALSE;
 
@@ -20,12 +23,21 @@ namespace s21{
         return break_flag;
     }
 
+    void snakeController::QTsig(int sig){
+        sig_ = sig;
+    }
+
+
+    snakeController::snakeController(snakeModel *m):model(m),state_(START), sig_(0), start_time_(clock()), elapsed_time_(0.0) {
+                srand(time(NULL));
+            };
+
     int snakeController::timer() {
         int timer = 0;
         clock_t current_time = clock();
         elapsed_time_ = (double)(current_time - start_time_);
 
-        if (elapsed_time_ >= 40000 - model->getGameStats().getLevel() * 1) {
+        if (elapsed_time_ >= 10000 - model->getGameStats().getLevel() * 1) {
             timer = 1;
             start_time_ = clock();
         }
@@ -39,6 +51,11 @@ namespace s21{
     bool snakeController::start_state() const{
         return state_ == START;
     }
+
+    snakeController::snake_state snakeController::getState() {
+        return state_;
+    }
+    
 
     snakeController::UserAction snakeController::get_signal(int user_input) {
         UserAction rc = NOSIG;
@@ -101,6 +118,10 @@ void snakeController::sigact(UserAction user_input, bool *break_flag)
                 case Move:
                     model->snake_move();
                     break;
+                case Pause:
+                    user_input = NOSIG;
+                    state_ = PAUSE;
+                    break;
                 case Terminate:
                     state_ = EXIT_STATE;
                     break;
@@ -130,6 +151,14 @@ void snakeController::sigact(UserAction user_input, bool *break_flag)
             model->clear_body();
             state_ = START;
             *break_flag = 0;
+            break;
+        case PAUSE:
+            if (user_input == Pause){
+                state_ = MOVING;
+            }
+            if (user_input == Terminate){
+                state_ = EXIT_STATE;
+            }
             break;
         default:
             break;
