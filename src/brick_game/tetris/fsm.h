@@ -1,7 +1,6 @@
 #ifndef FSM_H
 #define FSM_H
 
-#include "../../gui/cli/tetris/front.h"
 #include "../defines.h"
 #include "backend.h"
 

@@ -273,9 +273,6 @@ CURSES_NCURSES_LIBRARY:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX1
 //Path to a program.
 MACDEPLOYQT_EXECUTABLE:FILEPATH=/opt/homebrew/bin/macdeployqt
 
-//No help, variable specified on the command line.
-MAIN_FILE:UNINITIALIZED=../../../brick_game/main.cpp
-
 //Include for the OpenGL GLU library
 OPENGL_GLU_INCLUDE_DIR:PATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/System/Library/Frameworks/OpenGL.framework
 

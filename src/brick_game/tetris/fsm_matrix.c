@@ -71,11 +71,7 @@ void spawn(GameInfo_t *stats) {
   block_init(stats->current_block_type, stats->current_block_pos);
   block_init(stats->next_block_type, stats->next_block_pos);
   stats->current_rotate = 0;
-  print_stats(stats->level, stats->score, stats->high_score);
   if (check_spawn(stats->field, stats->current_block_pos)) {
-    field_print(stats->field);
-    block_print(stats->current_block_pos, stats->current_block_type);
-    next_block_print(stats->next_block_pos, stats->next_block_type);
     stats->state = MOVING;
   } else {
     stats->state = GAMEOVER;
@@ -88,8 +84,6 @@ void movedown(GameInfo_t *stats) {
       stats->current_block_pos[i][1] += 1;
     }
   }
-  field_print(stats->field);
-  block_print(stats->current_block_pos, stats->current_block_type);
 }
 
 void moveright(GameInfo_t *stats) {
@@ -105,9 +99,6 @@ void moveright(GameInfo_t *stats) {
       stats->current_block_pos[i][0] += 2;
     }
   }
-
-  field_print(stats->field);
-  block_print(stats->current_block_pos, stats->current_block_type);
 }
 
 void moveleft(GameInfo_t *stats) {
@@ -123,9 +114,6 @@ void moveleft(GameInfo_t *stats) {
       stats->current_block_pos[i][0] -= 2;
     }
   }
-
-  field_print(stats->field);
-  block_print(stats->current_block_pos, stats->current_block_type);
 }
 
 void rotate(GameInfo_t *stats) {
@@ -157,8 +145,6 @@ void rotate(GameInfo_t *stats) {
     default:
       break;
   }
-  field_print(stats->field);
-  block_print(stats->current_block_pos, stats->current_block_type);
 }
 
 int check_collide(GameInfo_t *stats) {
@@ -186,7 +172,6 @@ int check_collide(GameInfo_t *stats) {
     int score = attaching(stats->field);
     if (score >= 0) {
       game_stats(score, &stats->score, &stats->level, &stats->high_score);
-      print_stats(stats->level, stats->score, stats->high_score);
       stats->state = SPAWN;
     } else {
       stats->state = GAMEOVER;

@@ -134,6 +134,17 @@ TEST(Controller8, Timer) {
     EXPECT_EQ(controller.getState(), s21::snakeController::snake_state::MOVING);
 }
 
+TEST(Controller9, GETGAMEOVER) {
+    s21::snakeModel model;
+    s21::snakeController controller(&model);
+    
+    controller.QTsig(ENTER_KEY);  // Переход в SPAWN
+    controller.update();
+    
+    controller.update();
+    EXPECT_EQ(controller.gameover_state(), false);
+}
+
 TEST(Model1, Stats) {
     s21::snakeModel model;
     s21::snakeController controller(&model);

@@ -113,12 +113,14 @@ dist:
 	@echo "Distribution package created: /tetris.tar.gz"
 
 clang_check:
-	@clang-format -style=Google -n brick_game/*.* brick_game/tetris/*.* gui/cli/*.*
+	cp ../materials/linters/.clang-format .
+	clang-format -style=Google -n brick_game/*.* brick_game/tetris/*.* brick_game/snake/*.* gui/cli/snake/*.cpp gui/desktop/snake/*.cpp gui/cli/tetris/*.*
 
 clang_fix:
-	@clang-format -style=Google -i brick_game/*.* brick_game/tetris/*.* gui/cli/tetris/*.* brick_game/snake/*.* gui/cli/snake/*.* gui/desktop/snake*.*
+	cp ../materials/linters/.clang-format .
+	clang-format -style=Google -i brick_game/*.* brick_game/tetris/*.* brick_game/snake/*.* gui/cli/snake/*.cpp gui/desktop/snake/*.cpp gui/cli/tetris/*.*
 
 clean: dvi_clean
 	$(RM) out/* tetris games/highscore.md games/brickgame test test.c report *.info *.gz gcovreport highscore.md Snakehighscore.md /gui/desktop/Snake/build *.gcno *.gcda *.gcov *.info test_snake test_tetris 
-
+	
 rebuild: clean install

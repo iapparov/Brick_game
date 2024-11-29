@@ -5,21 +5,21 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-#include "gamewidget.h"
 #include "../../../brick_game/snake/snake_Controller.h"
+#include "gamewidget.h"
 
 class SnakeMainWindow : public QMainWindow {
-    Q_OBJECT
+  Q_OBJECT
 
-public:
-    SnakeMainWindow(s21::snakeController *c, QWidget *parent = nullptr);
+ public:
+  SnakeMainWindow(s21::snakeController *c, QWidget *parent = nullptr);
 
-private:
-    GameWidget *gameWidget_;
-    s21::snakeController *controller_;
+ private:
+  GameWidget *gameWidget_;
+  s21::snakeController *controller_;
 
-    void setupUI();
-    void startGame();
+  void setupUI();
+  void startGame();
 };
 
-#endif // SNAKEMAINWINDOW_H
+#endif  // SNAKEMAINWINDOW_H

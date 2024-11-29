@@ -11,6 +11,7 @@ void game_loop(void) {
 
   while (break_flag) {
     GameInfo_t *stats = updateCurrentState();
+
     if (stats->state == EXIT_STATE) break_flag = FALSE;
 
     if (stats->state == MOVING && timer(&start_time, elapsed_time)) {
@@ -22,6 +23,13 @@ void game_loop(void) {
     if (stats->state == MOVING || stats->state == START ||
         stats->state == GAMEOVER || stats->state == PAUSE) {
       sig = GET_USER_INPUT;
+    }
+
+    print_stats(stats->level, stats->score, stats->high_score);
+    field_print(stats->field);
+    block_print(stats->current_block_pos, stats->current_block_type);
+    if (stats->state != START) {
+      next_block_print(stats->next_block_pos, stats->next_block_type);
     }
   }
 }
