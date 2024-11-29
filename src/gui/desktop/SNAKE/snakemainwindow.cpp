@@ -12,9 +12,6 @@ SnakeMainWindow::SnakeMainWindow(s21::snakeController *c, QWidget *parent)
     // inputThread->start();  // Запуск потока
 }
 
-SnakeMainWindow::~SnakeMainWindow() {
-    delete controller_;  // Очистка контроллера
-}
 
 void SnakeMainWindow::setupUI() {
     gameWidget_ = new GameWidget(controller_,this);

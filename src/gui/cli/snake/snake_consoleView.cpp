@@ -37,6 +37,10 @@ namespace s21{
 
     void snakeConsoleView::render(snakeModel::Game_Stats stats){
         clear();
+
+        if (controller->gameover_state()){
+            print_gameover();
+        }
         if (controller->start_state()){
             print_intro();
         }
@@ -131,4 +135,10 @@ namespace s21{
         MVPRINTW(BOARD_Y / 2+2, (BOARD_X * 2 - BACK_MENU_MESSAGE_LEN) / 2 + 3,
         BACK_MENU_MESSAGE);
     }
+    
+    void snakeConsoleView::print_gameover(){
+        MVPRINTW(BOARD_Y / 2-5, (BOARD_X * 2 - GM_MESSAGE_LEN) / 2+1,
+        GM_MESSAGE);
+    }
+    
 }

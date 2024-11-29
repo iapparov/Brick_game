@@ -6,7 +6,7 @@ namespace s21{
     {
         game_stats_.setScore(game_stats_.getScore()+1);
         update_highscore();
-        if (game_stats_.getScore()%5==0){
+        if (game_stats_.getScore()%5==0 && game_stats_.getLevel()<=10){
             game_stats_.setLevel(game_stats_.getLevel()+1);
         }
     }
@@ -164,10 +164,16 @@ namespace s21{
                 break;
             case RIGHT:
                 new_x += 1;
+                #ifdef CONSOLE
+                new_x+=1;
+                #endif
                 // new_x2 += 2;
                 break;
             case LEFT:
                 new_x -= 1;
+                #ifdef CONSOLE
+                new_x-=1;
+                #endif
                 // new_x2 -= 2;
                 break;
         }
@@ -238,6 +244,9 @@ namespace s21{
                     // Новая позиция головы
             int new_x = body[0].first-1; // Текущая X-координата головы
             int new_y = body[0].second; // Сдвиг вверх (уменьшение Y-координаты)
+            #ifdef CONSOLE
+                new_x-=1;
+            #endif
             // int new_x2 = body[1].first-2; // Текущая X-координата головы
             // int new_y2 = body[1].second; // Сдвиг вверх (уменьшение Y-координаты)
 
@@ -261,6 +270,9 @@ namespace s21{
             // Новая позиция головы
             int new_x = body[0].first+1; // Текущая X-координата головы
             int new_y = body[0].second; // Сдвиг вверх (уменьшение Y-координаты)
+            #ifdef CONSOLE
+                new_x+=1;
+            #endif
             // int new_x2 = body[1].first+2; // Текущая X-координата головы
             // int new_y2 = body[1].second; // Сдвиг вверх (уменьшение Y-координаты)
 

@@ -32,6 +32,7 @@ namespace s21{
             void print_rectangle(int top_y, int bottom_y, int left_x, int right_x);
             void print_overlay_snake();
             void print_intro();
+            void print_gameover();
     };
 }
 

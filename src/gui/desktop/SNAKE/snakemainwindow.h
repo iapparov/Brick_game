@@ -13,7 +13,6 @@ class SnakeMainWindow : public QMainWindow {
 
 public:
     SnakeMainWindow(s21::snakeController *c, QWidget *parent = nullptr);
-    ~SnakeMainWindow();
 
 private:
     GameWidget *gameWidget_;

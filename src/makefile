@@ -33,6 +33,7 @@ install: brickgame
 	@echo "┃      'make run' to start the game       ┃"
 	@echo "┗=========================================┛"
 
+brickgame: CPPFLAGS += -DCONSOLE
 brickgame: $(OBJS_BRICKGAME)
 	$(CPP) $(CPPFLAGS) $^ -o $@ $(LDFLAGS)
 
@@ -66,25 +67,27 @@ out/%.o: brick_game/snake/%.cpp
 	mkdir -p out
 	$(CPP) $(CPPFLAGS) -c $< -o $@
 
-out/cover_%.o: brick_game/snake/%.cpp
-	mkdir -p out
-	$(CPP) $(CPPFLAGS) $(COVER) -c $< -o out/$(@F)
-
 out/%.o: gui/cli/snake/%.cpp
 	mkdir -p out
 	$(CPP) $(CPPFLAGS) -c $< -o $@
 
-test: tests/*.check $(OBJS_TETRIS_TEST)
+out/cover_%.o: brick_game/snake/%.cpp
+	mkdir -p out
+	$(CPP) $(CPPFLAGS) $(COVER) -c $< -o out/$(@F)
+
+test: clean $(OBJS_BRICKGAME) $(OBJS_BRICKGAME_TESTS) tests/*.check $(OBJS_TETRIS_TEST)
 	checkmk clean_mode=1 tests/*.check > test.c
-	gcc $(CFLAGS) test.c $(OBJS_TETRIS_TEST) -lcheck -lm -lpthread -o test $(LDFLAGS)
-	./test
+	gcc $(CFLAGS) test.c $(OBJS_TETRIS_TEST) -lcheck -lm -lpthread -o test_tetris $(LDFLAGS)
+	g++ $(CPPFLAGS) $(COVER) $(SRCS_SNAKE_TEST) $(OBJS_BRICKGAME_TESTS) -o test_snake $(GTEST) -lncurses
+	./test_snake
+	./test_tetris
 	rm *.md
 
 gcov_report: test
 	gcc $(CFLAGS) -coverage *.c $(SRCS_TETRIS_TEST) -o gcovreport -lcheck -lm $(LDFLAGS)
 	./gcovreport
 	lcov -t "gcovreport" -o gcovreport.info -c -d .
-	lcov -r gcovreport.info "*/gui/cli/tetris/*" "*/brick_game/tetris/tetris.c" -o gcovreport-filtered.info
+	lcov -r gcovreport.info "*/gui/cli/tetris/*" "*/brick_game/tetris/tetris.c"  "*/v1/*" "*/usr/*"  -o gcovreport-filtered.info
 	genhtml -o report gcovreport-filtered.info
 	open report/index.html
 	mv *.gcno report/
@@ -92,21 +95,30 @@ gcov_report: test
 	mv *.gcov report/
 
 
-test_cpp: clean $(OBJS_BRICKGAME) $(OBJS_BRICKGAME_TESTS)
-	g++ $(CPPFLAGS) $(COVER) $(SRCS_SNAKE_TEST) $(OBJS_BRICKGAME_TESTS) -o test $(GTEST) -lncurses
-	./test
+dvi: dvi_clean
+	doxygen dvi/Doxyfile
+	mv html dvi
+	open dvi/html/index.html
 
-gcov_report_cpp: test_cpp $(OBJS_BRICKGAME_TESTS)
-	g++ $(CPPFLAGS) $(COVER) $(SRCS_SNAKE_TEST) $(OBJS_BRICKGAME_TESTS) -o test $(GTEST) -lncurses
-	./test
-	gcov $(OBJS_BRICKGAME_TESTS)
-	lcov --capture --directory . --output-file coverage.info
-	genhtml coverage.info --output-directory out
-	open out/index.html
-	rm -rf *.gcno *.gcda *.gcov *.info */*.gcno ../*.gcda ../*.gcov ../*.info
+dvi_clean:
+	$(RM) dvi/html
 
+dist:
+	@mkdir -p dist
+	@cp -r $(BACK) dist
+	@cp -r $(FRONT) dist
+	@cp -r dvi dist/  
+	@tar -czvf tetris.tar.gz -C dist .
+	@rm -rf dist tetris
+	@echo "Distribution package created: /tetris.tar.gz"
 
-clean:
-	$(RM) out/* tetris games/highscore.md test test.c report *.info *.gz gcovreport highscore.md Snakehighscore.md /gui/desktop/Snake/build *.gcno *.gcda *.gcov *.info
+clang_check:
+	@clang-format -style=Google -n brick_game/*.* brick_game/tetris/*.* gui/cli/*.*
+
+clang_fix:
+	@clang-format -style=Google -i brick_game/*.* brick_game/tetris/*.* gui/cli/tetris/*.* brick_game/snake/*.* gui/cli/snake/*.* gui/desktop/snake*.*
+
+clean: dvi_clean
+	$(RM) out/* tetris games/highscore.md games/brickgame test test.c report *.info *.gz gcovreport highscore.md Snakehighscore.md /gui/desktop/Snake/build *.gcno *.gcda *.gcov *.info test_snake test_tetris 
 
 rebuild: clean install

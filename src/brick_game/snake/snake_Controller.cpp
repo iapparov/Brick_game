@@ -28,7 +28,7 @@ namespace s21{
     }
 
 
-    snakeController::snakeController(snakeModel *m):model(m),state_(START), sig_(0), start_time_(clock()), elapsed_time_(0.0) {
+    snakeController::snakeController(snakeModel *m):model(m),state_(START), sig_(0), start_time_(clock()), elapsed_time_(0.0), gameover_(0) {
                 srand(time(NULL));
             };
 
@@ -37,7 +37,7 @@ namespace s21{
         clock_t current_time = clock();
         elapsed_time_ = (double)(current_time - start_time_);
 
-        if (elapsed_time_ >= 10000 - model->getGameStats().getLevel() * 1) {
+        if (elapsed_time_ >= 10000 - model->getGameStats().getLevel() * 400) {
             timer = 1;
             start_time_ = clock();
         }
@@ -50,6 +50,10 @@ namespace s21{
 
     bool snakeController::start_state() const{
         return state_ == START;
+    }
+
+    bool snakeController::gameover_state() const{
+        return gameover_;
     }
 
     snakeController::snake_state snakeController::getState() {
@@ -87,6 +91,7 @@ void snakeController::sigact(UserAction user_input, bool *break_flag)
             switch (user_input)
             {
                 case Start:
+                    gameover_ = false;
                     state_ = SPAWN;
                     break;
                 case Terminate:
@@ -139,12 +144,16 @@ void snakeController::sigact(UserAction user_input, bool *break_flag)
             break;
         case REACH:
             model->stats();
+            if (model->getGameStats().getScore() == 200){
+                state_ = GAMEOVER;
+            }
             model->snake_plus();
             model->apple_spawn();
             state_=MOVING;
             break;
         case GAMEOVER:
             model->clear_body();
+            gameover_ = true;
             state_=START;
             break;
         case EXIT_STATE:

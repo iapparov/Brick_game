@@ -1,5 +1,6 @@
 #include "../gui/cli/snake/snake_consoleView.h"
 
+
 int main(void) {
   WIN_INIT(50);
   setlocale(LC_ALL, "");

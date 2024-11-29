@@ -35,11 +35,13 @@ namespace s21{
             int sig_;
             clock_t start_time_;
             double elapsed_time_;
+            bool gameover_;
         public:
             snakeController(snakeModel *m);
             void QTsig(int sig);
             snake_state getState();
             bool start_state() const;
+            bool gameover_state() const;
             bool update();
             int timer();
             const snakeModel::Game_Stats& getModel(); 
