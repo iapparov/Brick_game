@@ -67,3 +67,4 @@
 
 # Metrics
 *.jmx filter=lfs diff=lfs merge=lfs -text
+Makefile linguist-detectable=false
