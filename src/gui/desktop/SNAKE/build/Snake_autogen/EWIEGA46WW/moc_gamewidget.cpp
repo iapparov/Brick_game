@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'gamewidget.h'
 **
-** Created by: The Qt Meta Object Compiler version 68 (Qt 6.7.3)
+** Created by: The Qt Meta Object Compiler version 68 (Qt 6.8.2)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -18,7 +18,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'gamewidget.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 68
-#error "This file was generated using the moc from 6.7.3. It"
+#error "This file was generated using the moc from 6.8.2. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -31,18 +31,19 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 QT_WARNING_DISABLE_GCC("-Wuseless-cast")
 namespace {
+struct qt_meta_tag_ZN10GameWidgetE_t {};
+} // unnamed namespace
+
 
 #ifdef QT_MOC_HAS_STRINGDATA
-struct qt_meta_stringdata_CLASSGameWidgetENDCLASS_t {};
-constexpr auto qt_meta_stringdata_CLASSGameWidgetENDCLASS = QtMocHelpers::stringData(
+static constexpr auto qt_meta_stringdata_ZN10GameWidgetE = QtMocHelpers::stringData(
     "GameWidget"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
 #endif // !QT_MOC_HAS_STRINGDATA
-} // unnamed namespace
 
-Q_CONSTINIT static const uint qt_meta_data_CLASSGameWidgetENDCLASS[] = {
+Q_CONSTINIT static const uint qt_meta_data_ZN10GameWidgetE[] = {
 
  // content:
       12,       // revision
@@ -60,11 +61,11 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSGameWidgetENDCLASS[] = {
 
 Q_CONSTINIT const QMetaObject GameWidget::staticMetaObject = { {
     QMetaObject::SuperData::link<QWidget::staticMetaObject>(),
-    qt_meta_stringdata_CLASSGameWidgetENDCLASS.offsetsAndSizes,
-    qt_meta_data_CLASSGameWidgetENDCLASS,
+    qt_meta_stringdata_ZN10GameWidgetE.offsetsAndSizes,
+    qt_meta_data_ZN10GameWidgetE,
     qt_static_metacall,
     nullptr,
-    qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSGameWidgetENDCLASS_t,
+    qt_incomplete_metaTypeArray<qt_meta_tag_ZN10GameWidgetE_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<GameWidget, std::true_type>
     >,
@@ -73,9 +74,10 @@ Q_CONSTINIT const QMetaObject GameWidget::staticMetaObject = { {
 
 void GameWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
-    (void)_o;
-    (void)_id;
+    auto *_t = static_cast<GameWidget *>(_o);
+    (void)_t;
     (void)_c;
+    (void)_id;
     (void)_a;
 }
 
@@ -87,7 +89,7 @@ const QMetaObject *GameWidget::metaObject() const
 void *GameWidget::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_CLASSGameWidgetENDCLASS.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_ZN10GameWidgetE.stringdata0))
         return static_cast<void*>(this);
     return QWidget::qt_metacast(_clname);
 }

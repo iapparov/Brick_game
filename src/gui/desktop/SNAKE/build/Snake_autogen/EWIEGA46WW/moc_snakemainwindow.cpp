@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'snakemainwindow.h'
 **
-** Created by: The Qt Meta Object Compiler version 68 (Qt 6.7.3)
+** Created by: The Qt Meta Object Compiler version 68 (Qt 6.8.2)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -18,7 +18,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'snakemainwindow.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 68
-#error "This file was generated using the moc from 6.7.3. It"
+#error "This file was generated using the moc from 6.8.2. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -31,18 +31,19 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 QT_WARNING_DISABLE_GCC("-Wuseless-cast")
 namespace {
+struct qt_meta_tag_ZN15SnakeMainWindowE_t {};
+} // unnamed namespace
+
 
 #ifdef QT_MOC_HAS_STRINGDATA
-struct qt_meta_stringdata_CLASSSnakeMainWindowENDCLASS_t {};
-constexpr auto qt_meta_stringdata_CLASSSnakeMainWindowENDCLASS = QtMocHelpers::stringData(
+static constexpr auto qt_meta_stringdata_ZN15SnakeMainWindowE = QtMocHelpers::stringData(
     "SnakeMainWindow"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
 #endif // !QT_MOC_HAS_STRINGDATA
-} // unnamed namespace
 
-Q_CONSTINIT static const uint qt_meta_data_CLASSSnakeMainWindowENDCLASS[] = {
+Q_CONSTINIT static const uint qt_meta_data_ZN15SnakeMainWindowE[] = {
 
  // content:
       12,       // revision
@@ -60,11 +61,11 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSSnakeMainWindowENDCLASS[] = {
 
 Q_CONSTINIT const QMetaObject SnakeMainWindow::staticMetaObject = { {
     QMetaObject::SuperData::link<QMainWindow::staticMetaObject>(),
-    qt_meta_stringdata_CLASSSnakeMainWindowENDCLASS.offsetsAndSizes,
-    qt_meta_data_CLASSSnakeMainWindowENDCLASS,
+    qt_meta_stringdata_ZN15SnakeMainWindowE.offsetsAndSizes,
+    qt_meta_data_ZN15SnakeMainWindowE,
     qt_static_metacall,
     nullptr,
-    qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSSnakeMainWindowENDCLASS_t,
+    qt_incomplete_metaTypeArray<qt_meta_tag_ZN15SnakeMainWindowE_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<SnakeMainWindow, std::true_type>
     >,
@@ -73,9 +74,10 @@ Q_CONSTINIT const QMetaObject SnakeMainWindow::staticMetaObject = { {
 
 void SnakeMainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
-    (void)_o;
-    (void)_id;
+    auto *_t = static_cast<SnakeMainWindow *>(_o);
+    (void)_t;
     (void)_c;
+    (void)_id;
     (void)_a;
 }
 
@@ -87,7 +89,7 @@ const QMetaObject *SnakeMainWindow::metaObject() const
 void *SnakeMainWindow::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_CLASSSnakeMainWindowENDCLASS.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_ZN15SnakeMainWindowE.stringdata0))
         return static_cast<void*>(this);
     return QMainWindow::qt_metacast(_clname);
 }
